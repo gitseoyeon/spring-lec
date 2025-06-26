@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @font-face {
+            font-family: 'SeoulAlrimTTF-Heavy';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2505-1@1.0/SeoulAlrimTTF-Heavy.woff2') format('woff2');
+            font-weight: 900;
+            font-style: normal;
+        }
+
+        body {
+            font-family: SeoulAlrimTTF-Heavy;
+            background-color: lavender;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            background-color: antiquewhite;
+            padding: 30px;
+            border-radius: 60px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        table {
+            border: 2px solid black;
+            border-collapse: collapse;
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 10px 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>실습 페이지</h1>
+<!--    <form>-->
+<!--&lt;!&ndash;        <ul>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li><a href="helloPage">0625-helloPage</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li><a href="myPage">0625-myPage</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li><a href="calculatePage">0626-calculatePage</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;        </ul>&ndash;&gt;-->
+<!--        -->
+<!--    </form>-->
+
+    <table>
+        <tr>
+            <th scope="col" style="background-color: lightsteelblue">날짜</th>
+            <th scope="col" style="background-color: lightsteelblue">페이지</th>
+        </tr>
+        <tr>
+            <td rowspan="2">0625</td>
+            <td><a href="helloPage">helloPage</a></td>
+        </tr>
+        <tr>
+            <td><a href="myPage">myPage</a></td>
+        </tr>
+        <tr>
+            <td>0626</td>
+            <td><a href="calculatePage">calculatePage</a></td>
+        </tr>
+    </table>
+
+
+</body>
+</html>
