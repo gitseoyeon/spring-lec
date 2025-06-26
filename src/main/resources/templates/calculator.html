@@ -3,14 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>계산기</title>
+    <style>
+        @font-face {
+            font-family: 'NoonnuBasicGothicRegular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noon-2410@1.0/NoonnuBasicGothicRegular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: NoonnuBasicGothicRegular;
+            background-color: lavender;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: gray;
+            background-color: lavenderblush;
+            padding: 20px;
+        }
+
+        form {
+            background-color: antiquewhite;
+            padding: 30px;
+            border-radius: 60px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block; <!-- 하나의 요소가 한줄을 다 차지하는 것 -->
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: sandybrown;
+            border: none;
+            padding: 5px 5px; <!-- 위아래 양옆 -->
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .result {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: beige;
+        }
+
+        .error {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: beige;
+            color: crimson;
+        }
+    </style>
 </head>
 <body>
-    <h1>계산기 페이지</h1>
-    <form th:action="@{/calculate}" method="post">
-        <label for="num1">Number 1:</label>
-        <input type="number" id="num1" name="num1"/> <!-- id는 label이랑 매치, name은 requestParam이랑 매치 -->
+<h1>🤖 계산기 페이지</h1> <!-- 밖 여백: 마진 / 안 여백: 패딩 -->
+<form th:action="@{/calculate}" method="post">
+    <label for="num1">Number 1:</label>
+    <input type="number" step="any" id="num1" name="num1" required/> <!-- id는 label이랑 매치, name은 requestParam이랑 매치 -->
 
-        <button type="submit">Calculate</button>
-    </form>
+    <label for="num2">Number 2: </label>
+    <input type="number" step="any" id="num2" name="num2" required/>
+
+    <label for="operation">Operation</label>
+    <select id="operation" name="operation">
+        <option value="add">Add (+)</option>
+        <option value="subtract">Subtract (-)</option>
+        <option value="multiply">Multiply (×)</option>
+        <option value="divide">Divide (÷)</option>
+    </select>
+
+    <button type="submit">Calculate</button>
+</form>
+
+<div th:if="${result}" class="result">
+    <h2>Result: <span th:text="${result}"></span></h2>
+</div>
+
+<div th:if="${errorMessage}" class="error">
+    <p th:text="${errorMessage}"></p>
+</div>
 </body>
 </html>
