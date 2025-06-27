@@ -6,10 +6,22 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class DemoController {
-    private final DemoService demoService;
+    // 생성자 주입
+//    private final DemoService demoService;
+//
+//    @Autowired
+//    public DemoController(DemoService demoService) {
+//        this.demoService = demoService;
+//    }
 
+    // 필드 주입
+//    @Autowired
+//    private DemoService demoService;
+
+    // 수정자 주입
+    private DemoService demoService;
     @Autowired
-    public DemoController(DemoService demoService) {
+    public void setDemoService(DemoService demoService) {
         this.demoService = demoService;
     }
 }
