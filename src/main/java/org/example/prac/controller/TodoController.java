@@ -17,7 +17,7 @@ public class TodoController {
     public String showToDoList(Model model) {
         model.addAttribute("todos", todoService.getAllTasks());
 
-        return "todolist";}
+        return "todoList";}
 
     @PostMapping("/todos")
     public String addTask(@RequestParam("task") String task) {
