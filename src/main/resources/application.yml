@@ -1,3 +1,5 @@
 spring:
   application:
     name: prac
+  datasource:
+    url: jdbc:postgresql://localhost:5432/memo_app
