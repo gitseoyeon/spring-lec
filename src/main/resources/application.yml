@@ -1,5 +1,7 @@
 spring:
   application:
-    name: prac
+    name: ${APP_NAME}
   datasource:
-    url: jdbc:postgresql://localhost:5432/memo_app
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
