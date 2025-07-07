@@ -9,7 +9,7 @@
 <h1>🧑‍🏫 교사 목록</h1>
 
 <p>
-    <a href="/">🏠 홈으로</a>
+    <a href="/eduPage">🏠 홈으로</a>
     <a href="/teachers/add">➕ 교사 등록</a>
 </p>
 
@@ -29,8 +29,7 @@
             <a th:href="@{'/teachers/edit/' + ${teacher.id}}">수정</a>
         </td>
         <td>
-            <form th:action="@{/teachers/delete}" method="post" style="display: inline">
-                <input type="hidden" name="id" th:value="${teacher.id}" />
+            <form th:action="@{'/teachers/delete/' + ${teacher.id}}" method="post" style="display: inline">
                 <button type="submit">삭제</button>
             </form>
         </td>
