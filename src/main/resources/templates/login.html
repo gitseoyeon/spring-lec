@@ -10,5 +10,24 @@
 <div th:if="${param.registered}" class="success">
     ✨ 회원가입이 완료되었습니다. 로그인해주세요.
 </div>
+<div th:if="${error}" class="error" th:text="${error}"></div>
+<form th:action="@{/login}" th:object="${loginDto}" method="post" class="form-container">
+    <p>
+        <label>
+            아이디:
+            <input type="text" th:field="*{username}" />
+        </label>
+    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+    </p>
+    <p>
+        <label>
+            패스워드:
+            <input type="password" th:field="*{password}" />
+        </label>
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </p>
+    <button type="submit">로그인</button>
+    <a th:href="@{/signup}" class="cancel">회원가입</a>
+</form>
 </body>
 </html>

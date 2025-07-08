@@ -24,19 +24,29 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public String doSignup(@Valid @ModelAttribute SignupDTO signupDTO, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()) {
+    public String doSignup(
+            @Valid @ModelAttribute("signupDto") SignupDTO signupDTO,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
             return "signup";
         }
 
-       // 중복 가입 여부 체크
+        if(userRepository.findByUsername(signupDTO.getUsername()) != null) {
+            model.addAttribute("error", "이미 사용중인 아이디입니다.");
+
+            return "signup";
+        }
+
+        // 중복 가입 여부 체크
+
         User user = User.builder()
                 .username(signupDTO.getUsername())
                 .password(signupDTO.getPassword())
                 .build();
-
         userRepository.save(user);
 
-        return  "redirect:/login?registered"; // http://localhost:8080/login?registered=true
+        return "redirect:/login?registered";
     }
 }
