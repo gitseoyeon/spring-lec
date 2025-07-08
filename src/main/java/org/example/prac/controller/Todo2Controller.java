@@ -10,10 +10,9 @@ import org.example.prac.repository.TodoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/tododto")
@@ -26,12 +25,15 @@ public class Todo2Controller {
         return (User) session.getAttribute("user");
     }
     @GetMapping
-    public String list(HttpSession httpSession) {
+    public String list(HttpSession httpSession, Model model) {
         User user = getCurrentUser(httpSession);
 
         if(user == null) {
             return "redirect:/login";
         }
+
+        List<Todo> list = todoRepository.findAllByUserId(user.getId());
+        model.addAttribute("todos", list);
 
         return "todo-list";
     }
@@ -57,6 +59,48 @@ public class Todo2Controller {
                 .build();
 
         todoRepository.save(todo);
+
+        return "redirect:/tododto";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String update(@PathVariable int id, Model model, HttpSession httpSession) {
+        User user = getCurrentUser(httpSession);
+
+        if(user == null) return "redirect:/login";
+
+        Todo todo = todoRepository.findByIdAndUserId(id, user.getId());
+        TodoDTO todoDTO = new TodoDTO();
+        todoDTO.setId(todo.getId());
+        todoDTO.setTitle(todo.getTitle());
+        todo.setCompleted(todo.isCompleted());
+
+        model.addAttribute("todoDto", todoDTO);
+
+        return "todo-form";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@Valid @ModelAttribute TodoDTO todoDTO, BindingResult bindingResult, HttpSession httpSession) {
+        if(bindingResult.hasErrors()) return "todo-form";
+
+        User user = getCurrentUser(httpSession);
+        Todo todo = Todo.builder()
+                .id(todoDTO.getId())
+                .title(todoDTO.getTitle())
+                .completed(todoDTO.isCompleted())
+                .userId(user.getId())
+                .build();
+
+        todoRepository.update(todo);
+
+        return "redirect:/tododto";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable int id, HttpSession httpSession) {
+        User user = getCurrentUser(httpSession);
+        todoRepository.deleteByIdAndUserId(id, user.getId());
 
         return "redirect:/tododto";
     }

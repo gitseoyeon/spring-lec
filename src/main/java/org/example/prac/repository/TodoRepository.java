@@ -29,9 +29,27 @@ public class TodoRepository {
 
         return jdbcTemplate.query(sql, todoRowMapper, userId);
     }
+
+    public Todo findByIdAndUserId(int id, int userId) {
+        String sql = "SELECT * FROM todo WHERE id = ? AND user_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, todoRowMapper, id, userId);
+    }
     public int save(Todo todo) {
         String sql = "INSERT INTO todo (user_id, title, completed) VALUES (?, ?, ?)";
 
         return jdbcTemplate.update(sql, todo.getUserId(), todo.getTitle(), todo.isCompleted());
+    }
+
+    public int update(Todo todo) {
+        String sql = "UPDATE todo SET title = ?, completed = ? WHERE id = ? AND user_id = ?";
+
+        return jdbcTemplate.update(sql, todo.getTitle(), todo.isCompleted(), todo.getId(), todo.getUserId());
+    }
+
+    public int deleteByIdAndUserId(int id, int userId) {
+        String sql = "DELETE FROM todo WHERE id = ? AND user_id = ?";
+
+        return jdbcTemplate.update(sql, id, userId);
     }
 }
