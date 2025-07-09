@@ -27,7 +27,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String doLogin(
-            @Valid @ModelAttribute("loginDto") LoginDTO loginDto,
+            @Valid @ModelAttribute LoginDTO loginDto,
             BindingResult bindingResult,
             HttpSession httpSession,
             Model model
