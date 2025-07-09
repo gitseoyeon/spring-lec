@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>📝 회원가입</title>
-    <link rel="stylesheet" th:href="@{/todostyles.css}"/>
+    <link rel="stylesheet" th:href="@{/simplestyles.css}"/>
 </head>
-<body>
+<body class="container">
 <h1>📝 회원가입</h1>
-
 <div th:if="${error}" class="error" th:text="${error}"></div>
-<form th:action="@{/signup}" th:object="${signupDto}" method="post" class="form-container">
-    <p>
-        <label>
-            아이디:
-            <input type="text" th:field="*{username}" />
-        </label>
-    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-    </p>
-    <p>
-        <label>
-            패스워드:
-            <input type="password" th:field="*{password}" />
-        </label>
-    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-    </p>
+<form th:action="@{/signup}"
+      th:object="${signupDto}"
+      method="post"
+      class="form-container">
+    <label>
+        아이디:
+        <input type="text" th:field="*{username}" />
+    </label>
+    <div th:if="${#fields.hasErrors('username')}"
+         th:errors="*{username}"></div>
+    <label>
+        비밀번호:
+        <input type="password" th:field="*{password}" />
+    </label>
+    <div th:if="${#fields.hasErrors('password')}"
+         th:errors="*{password}"></div>
     <button type="submit">가입하기</button>
     <a th:href="@{/login}" class="cancel">로그인</a>
 </form>

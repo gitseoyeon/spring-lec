@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.prac.dto.TodoDTO;
 import org.example.prac.model.Todo;
-import org.example.prac.model.User;
+import org.example.prac.model.User_jdbc;
 import org.example.prac.repository.TodoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,18 +21,18 @@ public class Todo2Controller {
 
     private final TodoRepository todoRepository;
 
-    private User getCurrentUser(HttpSession session) {
-        return (User) session.getAttribute("user");
+    private User_jdbc getCurrentUser(HttpSession session) {
+        return (User_jdbc) session.getAttribute("user");
     }
     @GetMapping
     public String list(HttpSession httpSession, Model model) {
-        User user = getCurrentUser(httpSession);
+        User_jdbc userJdbc = getCurrentUser(httpSession);
 
-        if(user == null) {
+        if(userJdbc == null) {
             return "redirect:/login";
         }
 
-        List<Todo> list = todoRepository.findAllByUserId(user.getId());
+        List<Todo> list = todoRepository.findAllByUserId(userJdbc.getId());
         model.addAttribute("todos", list);
 
         return "todo-list";
@@ -51,9 +51,9 @@ public class Todo2Controller {
     public String add(@Valid @ModelAttribute TodoDTO todoDTO, BindingResult bindingResult, HttpSession httpSession) {
         if(bindingResult.hasErrors()) return "todo-form";
 
-        User user = getCurrentUser(httpSession);
+        User_jdbc userJdbc = getCurrentUser(httpSession);
         Todo todo = Todo.builder()
-                .userId(user.getId())
+                .userId(userJdbc.getId())
                 .title(todoDTO.getTitle())
                 .completed(todoDTO.isCompleted())
                 .build();
@@ -65,11 +65,11 @@ public class Todo2Controller {
 
     @GetMapping("/edit/{id}")
     public String update(@PathVariable int id, Model model, HttpSession httpSession) {
-        User user = getCurrentUser(httpSession);
+        User_jdbc userJdbc = getCurrentUser(httpSession);
 
-        if(user == null) return "redirect:/login";
+        if(userJdbc == null) return "redirect:/login";
 
-        Todo todo = todoRepository.findByIdAndUserId(id, user.getId());
+        Todo todo = todoRepository.findByIdAndUserId(id, userJdbc.getId());
         TodoDTO todoDTO = new TodoDTO();
         todoDTO.setId(todo.getId());
         todoDTO.setTitle(todo.getTitle());
@@ -84,12 +84,12 @@ public class Todo2Controller {
     public String edit(@Valid @ModelAttribute TodoDTO todoDTO, BindingResult bindingResult, HttpSession httpSession) {
         if(bindingResult.hasErrors()) return "todo-form";
 
-        User user = getCurrentUser(httpSession);
+        User_jdbc userJdbc = getCurrentUser(httpSession);
         Todo todo = Todo.builder()
                 .id(todoDTO.getId())
                 .title(todoDTO.getTitle())
                 .completed(todoDTO.isCompleted())
-                .userId(user.getId())
+                .userId(userJdbc.getId())
                 .build();
 
         todoRepository.update(todo);
@@ -99,8 +99,8 @@ public class Todo2Controller {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable int id, HttpSession httpSession) {
-        User user = getCurrentUser(httpSession);
-        todoRepository.deleteByIdAndUserId(id, user.getId());
+        User_jdbc userJdbc = getCurrentUser(httpSession);
+        todoRepository.deleteByIdAndUserId(id, userJdbc.getId());
 
         return "redirect:/tododto";
     }

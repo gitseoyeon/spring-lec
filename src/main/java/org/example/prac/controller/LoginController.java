@@ -3,7 +3,7 @@ package org.example.prac.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.prac.dto.LoginDTO;
+import org.example.prac.dto.LoginDto;
 import org.example.prac.model.User;
 import org.example.prac.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -17,48 +17,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class LoginController {
     private final UserRepository userRepository;
-
-    @GetMapping({"/", "/login"})
-    public String showLogin(Model model) {
-        model.addAttribute("loginDto", new LoginDTO());
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        model.addAttribute("loginDto", new LoginDto());
 
         return "login";
     }
 
     @PostMapping("/login")
-    public String doLogin(
-            @Valid @ModelAttribute LoginDTO loginDto,
-            BindingResult bindingResult,
-            HttpSession httpSession,
-            Model model
-    ) {
-        if (bindingResult.hasErrors()) {
-            return "login";
-        }
+    public String login(@Valid @ModelAttribute LoginDto loginDto, BindingResult bindingResult,
+                        HttpSession httpSession, Model model) {
+        if(bindingResult.hasErrors()) return "login";
 
-        try {
-            User user = userRepository.findByUsername(loginDto.getUsername());
+        User user = userRepository.findByUsername(loginDto.getUsername()).orElse(null);
 
-            if(!user.getPassword().equals(loginDto.getPassword())) {
-                model.addAttribute("error", "비밀번호가 올바르지 않습니다");
-
-                return "login";
-            }
-
-            httpSession.setAttribute("user", user);
-
-            return "redirect:/tododto";
-        } catch(Exception e) {
-            model.addAttribute("error", "존재하지 않는 사용자입니다.");
+        // 아이디를 잘못 입력하거나 비밀번호를 잘못입력했을 경우
+        if(user == null || !user.getPassword().equals(loginDto.getPassword())) {
+            model.addAttribute("error", "아이디, 비밀번호가 올바르지 않습니다.");
 
             return "login";
         }
-    }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
+        httpSession.setAttribute("user", user);
 
-        return "redirect:/login";
+        return "redirect:/posts";
     }
 }

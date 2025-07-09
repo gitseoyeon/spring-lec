@@ -2,7 +2,7 @@ package org.example.prac.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.prac.dto.SignupDTO;
+import org.example.prac.dto.SignupDto;
 import org.example.prac.model.User;
 import org.example.prac.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -18,34 +18,26 @@ public class SignupController {
     private final UserRepository userRepository;
 
     @GetMapping("/signup")
-    public String showSignup(Model model) {
-        model.addAttribute("signupDto", new SignupDTO());
+    public String signupForm(Model model) {
+        model.addAttribute("signupDto", new SignupDto());
+
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String doSignup(
-            @Valid @ModelAttribute SignupDTO signupDto,
-            BindingResult bindingResult,
-            Model model
-    ) {
-        if (bindingResult.hasErrors()) {
-            return "signup";
-        }
+    public String signup(@Valid @ModelAttribute SignupDto signupDto, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) return "signup";
 
-        if(userRepository.findByUsername(signupDto.getUsername()) != null) {
-            model.addAttribute("error", "이미 사용중인 아이디입니다.");
+        if(userRepository.findByUsername(signupDto.getUsername()).isPresent()) {
+            model.addAttribute("error", "이미 사용중인 아이디 입니다.");
 
             return "signup";
         }
 
-        // 중복 가입 여부 체크
-
-        User user = User.builder()
+        userRepository.save(User.builder()
                 .username(signupDto.getUsername())
                 .password(signupDto.getPassword())
-                .build();
-        userRepository.save(user);
+                .build());
 
         return "redirect:/login?registered";
     }

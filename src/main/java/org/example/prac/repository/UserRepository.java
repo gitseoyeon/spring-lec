@@ -1,42 +1,10 @@
 package org.example.prac.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.example.prac.model.User;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-@RequiredArgsConstructor
-public class UserRepository {
-    private final JdbcTemplate jdbcTemplate;
+import java.util.Optional;
 
-    private final RowMapper<User> userRowMapper = (resultSet, rowNum) -> {
-        User user = User.builder()
-                .id(resultSet.getInt("id"))
-                .username(resultSet.getString("username"))
-                .password(resultSet.getString("password"))
-                .build();
-
-        return user;
-    };
-
-
-    public User findByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-
-        try {
-            return jdbcTemplate.queryForObject(sql, userRowMapper, username);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    public int save(User user) {
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-
-        return jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
-
-    }
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findByUsername(String username);
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginDTO {
+public class Login_jdbcDTO {
 
     @NotBlank(message = "아이디를 입력하세요")
     private String username;
