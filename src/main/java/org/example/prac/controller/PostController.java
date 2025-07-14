@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.prac.dto.PostDto;
 import org.example.prac.model.Post;
-import org.example.prac.model.User;
+import org.example.prac.model.User_todo;
 import org.example.prac.repository.CommentRepository;
 import org.example.prac.repository.PostRepository;
 import org.springframework.stereotype.Controller;
@@ -25,8 +25,8 @@ public class PostController {
     private final PostRepository postRepository;
     private CommentRepository commentRepository;
 
-    private User currentUser(HttpSession httpSession) {
-        return (User) httpSession.getAttribute("user");
+    private User_todo currentUser(HttpSession httpSession) {
+        return (User_todo) httpSession.getAttribute("user");
     }
 
     @GetMapping
@@ -49,12 +49,12 @@ public class PostController {
     public String add(@Valid @ModelAttribute PostDto postDto, BindingResult bindingResult, HttpSession httpSession) {
         if(bindingResult.hasErrors()) return "post-form";
 
-        User user = currentUser(httpSession);
+        User_todo userTodo = currentUser(httpSession);
 
         Post post = Post.builder()
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
-                .author(user)
+                .author(userTodo)
                 .createdAt(LocalDateTime.now())
                 .build();
 

@@ -31,7 +31,7 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false) // optional = false: 유저가 반드시 있어야함다
     @JoinColumn(name = "author_id")
-    private User author;
+    private User_todo author;
 
     // cascade = CascadeType.ALL (post가 삭제됐을 때 삭제 여부) orphanRemoval = true (comment가 삭제됐을 때 같이 삭제)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
