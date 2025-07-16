@@ -34,7 +34,7 @@ public class ReservationController {
     }
 
     @PutMapping("/api/reservation/{id}")
-    public Reservation update(@PathVariable Long id, @RequestBody ReservationDto reservationDto) {
+    public Reservation update(@PathVariable Long id, @Valid @RequestBody ReservationDto reservationDto) {
         return reservationService.update(id, reservationDto);
     }
 
